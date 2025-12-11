@@ -723,20 +723,35 @@ def generate_dxf(yaml_path: str, output_path: str, generate_pdf: bool = False):
         try:
             from ezdxf.addons.drawing import Frontend, RenderContext
             from ezdxf.addons.drawing.matplotlib import MatplotlibBackend
+            from ezdxf.addons.drawing.config import (
+                Configuration,
+                ColorPolicy,
+                BackgroundPolicy,
+            )
             import matplotlib.pyplot as plt
 
             fig = plt.figure()
             ax = fig.add_axes([0, 0, 1, 1])
+
+            # Configure rendering: black lines on white background
+            config = Configuration(
+                background_policy=BackgroundPolicy.WHITE,
+                color_policy=ColorPolicy.BLACK,
+            )
             ctx = RenderContext(doc)
             out = MatplotlibBackend(ax)
-            Frontend(ctx, out).draw_layout(msp, finalize=True)
+            Frontend(ctx, out, config=config).draw_layout(msp, finalize=True)
+
+            # Set white background
+            ax.set_facecolor("white")
+            fig.patch.set_facecolor("white")
 
             # Set figure size based on page format (mm to inches)
             page_w_in = page_w / 25.4
             page_h_in = page_h / 25.4
             fig.set_size_inches(page_w_in, page_h_in)
 
-            fig.savefig(pdf_path, format="pdf", bbox_inches="tight")
+            fig.savefig(pdf_path, format="pdf", bbox_inches="tight", facecolor="white")
             plt.close(fig)
         except ImportError as e:
             import sys
