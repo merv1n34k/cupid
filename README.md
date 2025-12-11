@@ -1,10 +1,10 @@
-# CuPID
+# CUPID
 
-CuPID is a recursive acronym for *"Cupid's Piping and Instrumentation Diagram"*. Its purpose is to automate drawing technical and apparatus schemes with a definitive `yaml` configuration. It produces `dxf` format, which is open source and can be used by most CAD software.
+CUPID is a recursive acronym for *"Cupid's Unified Piping and Instrumentation Diagram"*. Its purpose is to automate drawing technical and apparatus schemes with a definitive `yaml` configuration. It produces `dxf` format, which is open source and can be used by most CAD software.
 
 ## Idea
 
-The idea behind CuPID is so you:
+The idea behind CUPID is so you:
 
 - *Don't waste your time* with routine schemes
 - *Make beautiful, clean schemes* your classmates will be jealous about
