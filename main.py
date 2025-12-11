@@ -27,7 +27,7 @@ BLOCK_WIDTH = 150  # mm, base width
 VERTICAL_GAP = 15  # mm, gap between blocks
 HORIZONTAL_INDENT = BLOCK_WIDTH * HEADER_RATIO  # indent for nested blocks
 TEXT_MARGIN = 2  # mm, margin inside cells
-IO_ARROW_LENGTH = 60  # mm, length of input/output arrows (1.5x of original 40)
+IO_ARROW_LENGTH = 60  # mm, length of input/output arrows
 IO_ARROW_LONG_SCALE = 1.5  # scale for even arrows in chess pattern
 IO_TEXT_PADDING = 5  # mm, padding for iotext from block edge
 COLUMN_GAP = 40  # mm, gap between columns
@@ -59,6 +59,13 @@ def wrap_text(text: str, max_width: float, char_width: float) -> list[str]:
         lines.append(current_line)
 
     return lines if lines else [""]
+
+
+def normalize_newlines(text: str) -> str:
+    """Convert escaped \\n to actual newlines."""
+    if text is None:
+        return ""
+    return text.replace("\\n", "\n")
 
 
 @dataclass
@@ -102,12 +109,12 @@ def parse_step(
     block = Block(
         id=s.get("id", ""),
         type=block_type,
-        name=s.get("name", ""),
+        name=normalize_newlines(s.get("name", "")),
         number=number,
         controls=s.get("controls", []),
         conditions=s.get("conditions", []),
-        inputs=s.get("in", []),
-        outputs=s.get("out", []),
+        inputs=[normalize_newlines(i) for i in s.get("in", [])],
+        outputs=[normalize_newlines(o) for o in s.get("out", [])],
         depth=depth,
     )
 
@@ -328,7 +335,7 @@ def draw_block(msp, block: Block, x: float, y: float, config: dict) -> float:
         )
 
         # Conditions text - same size as iotext
-        cond_text = ", ".join(block.conditions)
+        cond_text = "; ".join(block.conditions)
         msp.add_text(
             cond_text,
             height=io_font_size * 0.35,
@@ -779,3 +786,4 @@ if __name__ == "__main__":
     dxf_file = args.output if args.output else yaml_file.rsplit(".", 1)[0] + ".dxf"
 
     generate_dxf(yaml_file, dxf_file, generate_pdf=args.pdf)
+
