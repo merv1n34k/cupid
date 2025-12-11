@@ -1,0 +1,341 @@
+format: "a1"
+font:
+  family: "ISOCPEUR"
+  size: 14
+
+steps:
+  # ============================================================
+  # SP 1: Sanitary Preparation of Production
+  # ============================================================
+  - step:
+      id: "sp1"
+      type: "SP"
+      name: "Sanitary preparation of production"
+      in:
+        - "Detergent from storage"
+        - "Drinking water\nt=40°C"
+      steps:
+        - step:
+            id: "sp1.1"
+            name: "Preparation of disinfectants for premises"
+            controls:
+              - "Ct"
+              - "Cc"
+            out:
+              - "DS to {sp1.3}"
+
+        - step:
+            id: "sp1.2"
+            name: "Sanitary preparation of personnel"
+            steps:
+              - step:
+                  id: "sp1.2.1"
+                  name: "Preparation of disinfectant solution for hand treatment"
+                  controls:
+                    - "Ct"
+                    - "Cc"
+                  in:
+                    - "Ethyl alcohol\nfrom storage"
+                    - "C=96%"
+                    - "Drinking water\nt=20°C"
+                  out:
+                    - "DS to {sp1.2.2}"
+
+              - step:
+                  id: "sp1.2.2"
+                  name: "Sanitary preparation of personnel for work in clean rooms"
+                  controls:
+                    - "Ct"
+                    - "Cb"
+                  in:
+                    - "DS from {sp1.2.1}"
+                  out:
+                    - "Waste solutions\nto WWT"
+
+        - step:
+            id: "sp1.3"
+            name: "Preparation of production premises"
+            controls:
+              - "Ct"
+              - "Cb"
+            in:
+              - "DS from {sp1.1}"
+            out:
+              - "Waste solutions\nto WWT"
+
+        - step:
+            id: "sp1.4"
+            name: "Equipment preparation"
+            steps:
+              - step:
+                  id: "sp1.4.1"
+                  name: "Preparation of detergent for equipment washing"
+                  controls:
+                    - "Ct"
+                    - "Cc"
+                  in:
+                    - "NaOH from storage"
+                    - "Drinking water\nt=40°C"
+                  out:
+                    - "DT to {sp1.4.2}"
+                  conditions:
+                    - "pH=13.7"
+
+              - step:
+                  id: "sp1.4.2"
+                  name: "Equipment washing"
+                  controls:
+                    - "Ct"
+                    - "Cc"
+                  in:
+                    - "DT from {sp1.4.1}"
+                  out:
+                    - "Waste solutions\nto WWT"
+
+              - step:
+                  id: "sp1.4.3"
+                  name: "Equipment sterilization"
+                  controls:
+                    - "Ct"
+                    - "Cb"
+                  in:
+                    - "Saturated\nsteam"
+                    - "P=0.2 MPa"
+                  out:
+                    - "Condensate to WWT"
+                  conditions:
+                    - "T=60min"
+                    - "t=120-126°C"
+
+  # ============================================================
+  # SP 2: Preparation for Production Cultivation
+  # ============================================================
+  - step:
+      id: "sp2"
+      type: "SP"
+      name: "Preparation for production cultivation"
+      steps:
+        - step:
+            id: "sp2.1"
+            name: "Nutrient medium preparation"
+            controls:
+              - "Ct"
+              - "Cc"
+            in:
+              - "NM components\nfrom storage"
+              - "Drinking water\nt=25°C"
+            out:
+              - "NM to {sp2.2}"
+            conditions:
+              - "T=30min"
+              - "n=300rpm"
+              - "t=90°C"
+
+        - step:
+            id: "sp2.2"
+            name: "Nutrient medium sterilization"
+            controls:
+              - "Ct"
+              - "Cb"
+            in:
+              - "NM from {sp2.1}"
+            out:
+              - "NM to main TP"
+            conditions:
+              - "T=5min"
+              - "t=140°C"
+
+        - step:
+            id: "sp2.3"
+            name: "Antifoam sterilization"
+            controls:
+              - "Ct"
+              - "Cb"
+            in:
+              - "Antifoam from\nstorage"
+            out:
+              - "Antifoam to\nmain TP"
+            conditions:
+              - "T=30min"
+              - "t=115°C"
+              - "P=0.05MPa"
+
+        - step:
+            id: "sp2.4"
+            name: "Feed preparation"
+            steps:
+              - step:
+                  id: "sp2.4.1"
+                  name: "Reactor re-sterilization"
+                  controls:
+                    - "Ct"
+                    - "Cb"
+                  in:
+                    - "Saturated\nsteam"
+                    - "P=0.28 MPa"
+                  out:
+                    - "Condensate to WWT"
+                  conditions:
+                    - "T=20min"
+                    - "t=140°C"
+
+              - step:
+                  id: "sp2.4.2"
+                  name: "Mixing of feed components"
+                  controls:
+                    - "Ct"
+                    - "Cc"
+                  in:
+                    - "Feed components\nfrom storage"
+                    - "Drinking water\nt=25°C"
+                  out:
+                    - "Feed\nto {sp2.5}"
+                  conditions:
+                    - "T=30min"
+                    - "n=300rpm"
+                    - "t=90°C"
+
+        - step:
+            id: "sp2.5"
+            name: "Feed sterilization"
+            controls:
+              - "Ct"
+              - "Cb"
+            in:
+              - "Feed from\n{sp2.4.2}"
+            out:
+              - "Feed to\nmain TP"
+            conditions:
+              - "T=5min"
+              - "t=140°C"
+
+        - step:
+            id: "sp2.6"
+            name: "Titrant sterilization"
+            controls:
+              - "Ct"
+              - "Cb"
+            in:
+              - "Titrant from storage"
+              - "Saturated\nsteam"
+              - "P=0.28 MPa"
+            out:
+              - "Titrant to\nmain TP"
+            conditions:
+              - "T=20min"
+              - "t=140°C"
+
+  # ============================================================
+  # SP 3: Aeration Air Preparation
+  # ============================================================
+  - step:
+      id: "sp3"
+      type: "SP"
+      name: "Aeration air preparation"
+      controls:
+        - "Ct"
+        - "Cc"
+      steps:
+        - step:
+            id: "sp3.1"
+            name: "Air intake from atmosphere"
+            controls:
+              - "Ct"
+              - "Cc"
+            in:
+              - "Atmospheric\nair"
+            out:
+              - "Air to {sp3.2}"
+            conditions:
+              - "h_pipe=8-10m"
+              - "S=12m"
+
+        - step:
+            id: "sp3.2"
+            name: "Preliminary air filtration"
+            controls:
+              - "Ct"
+            in:
+              - "Cassette filters\nfrom storage"
+              - "Air from\n{sp3.1}"
+            out:
+              - "Air to {sp3.3}"
+            conditions:
+              - "R_part=10μm"
+              - "E_filt=65-90%"
+              - "T_life=200-250h"
+
+        - step:
+            id: "sp3.3"
+            name: "Air compression and transport"
+            controls:
+              - "Ct"
+            in:
+              - "Air from\n{sp3.2}"
+            out:
+              - "Air to {sp3.4}"
+            conditions:
+              - "P=0.2MPa"
+              - "t=100-200°C"
+
+        - step:
+            id: "sp3.4"
+            name: "Air cooling and moisture condensation"
+            controls:
+              - "Ct"
+            in:
+              - "Drinking water\nt=20°C"
+              - "Air from\n{sp3.3}"
+            out:
+              - "Liquid waste to WWT"
+              - "Condensate to WWT"
+              - "Air to {sp3.5}"
+            conditions:
+              - "W_moist=60%"
+              - "t_air=25°C"
+
+        - step:
+            id: "sp3.5"
+            name: "System pressure stabilization"
+            controls:
+              - "Ct"
+              - "Cc"
+            in:
+              - "Air from\n{sp3.4}"
+            out:
+              - "Condensate to WWT"
+              - "Air to {sp3.6}"
+            conditions:
+              - "P_air=0.15MPa"
+              - "W_moist=40%"
+
+        - step:
+            id: "sp3.6"
+            name: "Removal of main contaminant mass"
+            controls:
+              - "Ct"
+              - "Cb"
+            in:
+              - "Filter from\n{sp1.4.3}"
+              - "Air from\n{sp3.5}"
+            out:
+              - "Air to {sp3.7}"
+              - "Filter to WWT"
+            conditions:
+              - "R_part=1μm"
+              - "E_filt=95%"
+
+        - step:
+            id: "sp3.7"
+            name: "Air sterilization on individual filter"
+            controls:
+              - "Ct"
+              - "Cb"
+            in:
+              - "Air from\n{sp3.6}"
+            out:
+              - "Filter to WWT"
+              - "Air to\nmain TP"
+            conditions:
+              - "R_part=0.01μm"
+              - "E_filt=99%"

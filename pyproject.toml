@@ -1,0 +1,11 @@
+[project]
+name = "cupid"
+version = "0.1.0"
+description = "Cupid's Piping and Instrumentation Diagram"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ezdxf>=1.4.3",
+    "matplotlib>=3.10.8",
+    "pyyaml>=6.0.3",
+]
